@@ -3,12 +3,9 @@ import random
 import math
 
 def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
-    """
-    Reverse-engineer the interest rate based on loan amount, term, and current repayment.
-    """
     total_payments = loan_term_years * 12
-    low, high = 0.01, 20.0  # Interest rate search range
-    for _ in range(100):  # Iterative approximation
+    low, high = 0.01, 20.0
+    for _ in range(100):
         mid = (low + high) / 2
         monthly_rate = (mid / 100) / 12
         estimated_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
@@ -21,9 +18,6 @@ def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
     return round(mid, 2)
 
 def mortgage_calculator(loan_amount, loan_term_years, interest_rate):
-    """
-    Calculate the monthly mortgage repayment with daily compounding interest.
-    """
     daily_rate = (interest_rate / 100) / 365
     monthly_rate = ((1 + daily_rate) ** 30) - 1
     total_payments = loan_term_years * 12
@@ -35,7 +29,6 @@ def mortgage_calculator(loan_amount, loan_term_years, interest_rate):
     
     return round(monthly_payment, 2)
 
-# Streamlit UI
 st.set_page_config(page_title="Count Your Chickens Before They Hatch", page_icon="🐔", layout="centered")
 st.markdown("""
     <style>
@@ -47,7 +40,6 @@ st.markdown("""
 st.title("🐔 Count Your Chickens Before They Hatch 🥚")
 st.write("### A fun way to see how much you could save if interest rates drop!")
 
-# User input for loan details
 loan_amount = st.number_input("Enter Loan Amount ($)", min_value=1000.0, step=1000.0)
 loan_term_years = st.number_input("Enter Years Remaining on Loan", min_value=1, max_value=40, step=1)
 monthly_repayment = st.number_input("Enter Your Current Monthly Repayment ($)", min_value=100.0, step=10.0)
@@ -72,13 +64,17 @@ if loan_amount and loan_term_years and monthly_repayment:
     ]
     st.markdown(f"<p class='big-font'>🐥 {random.choice(messages)}</p>", unsafe_allow_html=True)
     
-    st.markdown(f"<div class='highlight'>
-                 <p class='big-font'>Your Current Monthly Repayment: **${current_repayment}**</p>
-                 <p class='big-font'>If Rates Drop by {rate_cut}%, Your New Repayment: **${new_repayment}**</p>
-                 <p class='big-font'>You Could Save: **${savings_per_month:.2f} per month / ${savings_per_year:.2f} per year!**</p>
-                 </div>", unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class='highlight'>
+            <p class='big-font'>Your Current Monthly Repayment: **${current_repayment}**</p>
+            <p class='big-font'>If Rates Drop by {rate_cut}%, Your New Repayment: **${new_repayment}**</p>
+            <p class='big-font'>You Could Save: **${savings_per_month:.2f} per month / ${savings_per_year:.2f} per year!**</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     
-# Disclaimer
 st.markdown("""
 **Disclaimer:** This tool is for **illustrative purposes only** and does not constitute financial advice. 
 The calculations are based on general assumptions, including daily interest compounding and fixed monthly repayments. 
