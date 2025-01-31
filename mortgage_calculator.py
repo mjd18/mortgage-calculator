@@ -22,8 +22,8 @@ st.title("🐔 Count Your Chickens Before They Hatch 🥚")
 st.write("### A fun way to see how much you could save if interest rates drop!")
 
 # User input for loan details
-loan_amount = st.number_input("Enter Loan Amount ($)", min_value=1000.0, step=1000.0, format="%.2f")
-loan_term_years = st.number_input("Enter Loan Term (years)", min_value=1, max_value=40, step=1)
+loan_amount = st.number_input("Enter Loan Amount ($)", min_value=1000.0, step=1000.0, format="%,.2f" )
+loan_term_years = st.number_input("Enter Years Remaining on Loan", min_value=1, max_value=40, step=1)
 interest_rate = st.number_input("Enter Current Interest Rate (%)", min_value=0.01, max_value=20.0, step=0.01, format="%.2f")
 rate_cut = st.slider("Potential Interest Rate Cut (%)", min_value=0.0, max_value=10.0, step=0.01, format="%.2f")
 
