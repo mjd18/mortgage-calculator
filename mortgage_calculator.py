@@ -104,3 +104,4 @@ st.markdown(
     Please consult a professional for personalised financial advice.
     """,
     unsafe_allow_html=True
+)
