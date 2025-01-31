@@ -24,11 +24,6 @@ st.write("### A fun way to see how much you could save if interest rates drop!")
 # User input for loan details
 loan_amount = st.number_input("Enter Loan Amount ($)", min_value=1000.0, step=1000.0)
 
-# Display loan amount with commas for readability
-if loan_amount:
-    formatted_loan_amount = f"{loan_amount:,.2f}"
-    st.write(f"You entered: **${formatted_loan_amount}**")
-
 # Format loan amount with commas for display
 formatted_loan_amount = f"{loan_amount:,.2f}"
 st.write(f"You entered: **${formatted_loan_amount}**")
