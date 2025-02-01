@@ -97,3 +97,4 @@ st.markdown("""
     Actual loan terms, interest rates, and savings may vary depending on your lender and financial situation. 
     Please consult a professional for personalised financial advice.
     """, unsafe_allow_html=True)
+
