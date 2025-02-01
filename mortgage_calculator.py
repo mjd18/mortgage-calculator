@@ -2,7 +2,6 @@ import streamlit as st
 import random
 import math
 import requests
-import plotly.express as px
 from streamlit_lottie import st_lottie
 
 # Fetch real-time interest rate data (dummy example, replace with real API)
@@ -80,9 +79,6 @@ if interest_rate:
     new_repayment = mortgage_calculator(loan_amount, loan_term_years, new_interest_rate)
     savings_per_month = current_repayment - new_repayment
     savings_per_year = savings_per_month * 12
-    
-    fig = px.line(x=[interest_rate, new_interest_rate], y=[current_repayment, new_repayment], labels={'x':'Interest Rate (%)', 'y':'Monthly Repayment ($)'}, title='Repayment Trend')
-    st.plotly_chart(fig)
     
     st.success(f"💰 You Could Save: **${savings_per_month:.2f} per month / ${savings_per_year:.2f} per year!**")
 
