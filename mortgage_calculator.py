@@ -8,54 +8,37 @@ def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
     low, high = 0.1, 12.0
     iteration = 0
     max_iter = 500
+
+    if monthly_repayment < (loan_amount / total_payments):
+        return None  # Impossible case, repayment is too low to cover the loan
+
     while iteration < max_iter:
         iteration += 1
         mid = (low + high) / 2
         monthly_rate = (mid / 100) / 12
         estimated_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
         diff = abs(estimated_payment - monthly_repayment)
+
         if diff < tolerance:
             return round(mid, 2)
         elif estimated_payment > monthly_repayment:
             high = mid
         else:
             low = mid
-    return round(mid, 2)
+
+    return None
 
 def mortgage_calculator(loan_amount, loan_term_years, interest_rate):
-    daily_rate = (interest_rate / 100) / 365
-    monthly_rate = ((1 + daily_rate) ** 30) - 1
+    if interest_rate == 0:
+        return round(loan_amount / (loan_term_years * 12), 2)
+
+    monthly_rate = (interest_rate / 100) / 12
     total_payments = loan_term_years * 12
-    if monthly_rate > 0:
-        monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
-    else:
-        monthly_payment = loan_amount / total_payments
+    monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
+
     return round(monthly_payment, 2)
 
 st.set_page_config(page_title="Count Your Chickens Before They Hatch", page_icon="🐔", layout="centered")
-st.markdown(
-    """
-    <style>
-        body {
-            background-color: #FAF9F6;
-            color: #333;
-            font-family: Arial, sans-serif;
-        }
-        .big-font {
-            font-size: 22px !important;
-            font-weight: bold;
-            text-align: center;
-            color: #333;
-        }
-        .highlight {
-            background-color: #fff0b3;
-            padding: 10px;
-            border-radius: 10px;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 st.title("🐔 Count Your Chickens Before They Hatch 🥚")
 st.write("### A fun way to see how much you could save if interest rates drop!")
@@ -66,8 +49,12 @@ monthly_repayment = st.number_input("Enter Your Current Monthly Repayment ($)", 
 
 if loan_amount and loan_term_years and monthly_repayment:
     interest_rate = calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment)
-    st.write(f"### Estimated Current Interest Rate: **{interest_rate}%**")
+    if interest_rate is None:
+        st.error("⚠️ Your monthly repayment seems too low for this loan. Please check your inputs.")
+    else:
+        st.write(f"### Estimated Current Interest Rate: **{interest_rate}%**")
 
+if interest_rate:
     rate_cut = st.slider("Potential Interest Rate Cut (%)", min_value=0.0, max_value=10.0, step=0.01, format="%.2f")
     new_interest_rate = max(0.01, interest_rate - rate_cut)
     current_repayment = mortgage_calculator(loan_amount, loan_term_years, interest_rate)
@@ -81,16 +68,14 @@ if loan_amount and loan_term_years and monthly_repayment:
         "Don't count your chickens yet, but this looks good! 🥚",
         "Interest rates dropping? That's eggs-cellent news! 🍳",
     ]
-    st.markdown(
-        f"<p class='big-font'>🐥 {random.choice(messages)}</p>", unsafe_allow_html=True
-    )
+    st.markdown(f"<p style='font-size:22px; font-weight:bold; text-align:center;'>🐥 {random.choice(messages)}</p>", unsafe_allow_html=True)
 
     st.markdown(
         f"""
-        <div class='highlight'>
-            <p class='big-font'>Your Current Monthly Repayment: **${current_repayment}**</p>
-            <p class='big-font'>If Rates Drop by {rate_cut}%, Your New Repayment: **${new_repayment}**</p>
-            <p class='big-font'>You Could Save: **${savings_per_month:.2f} per month / ${savings_per_year:.2f} per year!**</p>
+        <div style='background-color:#fff0b3; padding:10px; border-radius:10px;'>
+            <p style='font-size:22px; font-weight:bold;'>Your Current Monthly Repayment: **${current_repayment}**</p>
+            <p style='font-size:22px; font-weight:bold;'>If Rates Drop by {rate_cut}%, Your New Repayment: **${new_repayment}**</p>
+            <p style='font-size:22px; font-weight:bold;'>You Could Save: **${savings_per_month:.2f} per month / ${savings_per_year:.2f} per year!**</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -105,3 +90,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
