@@ -1,6 +1,18 @@
 import streamlit as st
 import random
 import math
+import requests
+import plotly.express as px
+from streamlit_lottie import st_lottie
+
+# Fetch real-time interest rate data (dummy example, replace with real API)
+def get_real_time_interest_rate():
+    try:
+        response = requests.get("https://api.example.com/interest-rates")
+        data = response.json()
+        return data.get("current_rate", 6.0)
+    except:
+        return 6.0  # Default fallback
 
 def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
     total_payments = loan_term_years * 12
@@ -10,7 +22,7 @@ def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
     max_iter = 500
 
     if monthly_repayment < (loan_amount / total_payments):
-        return None  # Impossible case, repayment is too low to cover the loan
+        return None
 
     while iteration < max_iter:
         iteration += 1
@@ -31,21 +43,28 @@ def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
 def mortgage_calculator(loan_amount, loan_term_years, interest_rate):
     if interest_rate == 0:
         return round(loan_amount / (loan_term_years * 12), 2)
-
+    
     monthly_rate = (interest_rate / 100) / 12
     total_payments = loan_term_years * 12
     monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
 
     return round(monthly_payment, 2)
 
-st.set_page_config(page_title="Count Your Chickens Before They Hatch", page_icon="🐔", layout="centered")
+st.set_page_config(page_title="Count Your Chickens Before They Hatch", page_icon="🐔", layout="wide")
+st.markdown("""<style>body { background-color: #fef9e7; color: #333; font-family: Arial, sans-serif; }</style>""", unsafe_allow_html=True)
 
 st.title("🐔 Count Your Chickens Before They Hatch 🥚")
 st.write("### A fun way to see how much you could save if interest rates drop!")
 
-loan_amount = st.number_input("Enter Loan Amount ($)", min_value=1000.0, step=1000.0)
-loan_term_years = st.number_input("Enter Years Remaining on Loan", min_value=1, max_value=40, step=1)
-monthly_repayment = st.number_input("Enter Your Current Monthly Repayment ($)", min_value=100.0, step=10.0)
+# Fetch real-time interest rate
+default_interest_rate = get_real_time_interest_rate()
+
+col1, col2 = st.columns(2)
+
+with col1:
+    loan_amount = st.number_input("Enter Loan Amount ($)", min_value=1000.0, step=1000.0)
+    loan_term_years = st.number_input("Enter Years Remaining on Loan", min_value=1, max_value=40, step=1)
+    monthly_repayment = st.number_input("Enter Your Current Monthly Repayment ($)", min_value=100.0, step=10.0)
 
 if loan_amount and loan_term_years and monthly_repayment:
     interest_rate = calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment)
@@ -61,6 +80,11 @@ if interest_rate:
     new_repayment = mortgage_calculator(loan_amount, loan_term_years, new_interest_rate)
     savings_per_month = current_repayment - new_repayment
     savings_per_year = savings_per_month * 12
+    
+    fig = px.line(x=[interest_rate, new_interest_rate], y=[current_repayment, new_repayment], labels={'x':'Interest Rate (%)', 'y':'Monthly Repayment ($)'}, title='Repayment Trend')
+    st.plotly_chart(fig)
+    
+    st.success(f"💰 You Could Save: **${savings_per_month:.2f} per month / ${savings_per_year:.2f} per year!**")
 
     messages = [
         "Looks like you might hatch some extra savings! 🐣",
@@ -70,24 +94,10 @@ if interest_rate:
     ]
     st.markdown(f"<p style='font-size:22px; font-weight:bold; text-align:center;'>🐥 {random.choice(messages)}</p>", unsafe_allow_html=True)
 
-    st.markdown(
-        f"""
-        <div style='background-color:#fff0b3; padding:10px; border-radius:10px;'>
-            <p style='font-size:22px; font-weight:bold;'>Your Current Monthly Repayment: **${current_repayment}**</p>
-            <p style='font-size:22px; font-weight:bold;'>If Rates Drop by {rate_cut}%, Your New Repayment: **${new_repayment}**</p>
-            <p style='font-size:22px; font-weight:bold;'>You Could Save: **${savings_per_month:.2f} per month / ${savings_per_year:.2f} per year!**</p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-st.markdown(
-    """
+# Disclaimer
+st.markdown("""
     **Disclaimer:** This tool is for **illustrative purposes only** and does not constitute financial advice. 
     The calculations are based on general assumptions, including daily interest compounding and fixed monthly repayments. 
     Actual loan terms, interest rates, and savings may vary depending on your lender and financial situation. 
     Please consult a professional for personalised financial advice.
-    """,
-    unsafe_allow_html=True
-)
-
+    """, unsafe_allow_html=True)
