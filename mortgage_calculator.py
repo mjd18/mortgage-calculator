@@ -1,8 +1,6 @@
 import streamlit as st
 import random
 import math
-import pandas as pd
-import altair as alt
 
 # --- Calculation Functions ---
 def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
@@ -38,26 +36,6 @@ def mortgage_calculator(loan_amount, loan_term_years, interest_rate):
     total_payments = loan_term_years * 12
     monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
     return round(monthly_payment, 2)
-
-def generate_amortization_schedule(loan_amount, loan_term_years, interest_rate):
-    schedule = []
-    monthly_payment = mortgage_calculator(loan_amount, loan_term_years, interest_rate)
-    remaining_balance = loan_amount
-    monthly_rate = (interest_rate / 100) / 12
-    for i in range(1, loan_term_years * 12 + 1):
-        interest_payment = round(remaining_balance * monthly_rate, 2)
-        principal_payment = round(monthly_payment - interest_payment, 2)
-        remaining_balance = round(remaining_balance - principal_payment, 2)
-        if remaining_balance < 0:
-            remaining_balance = 0
-        schedule.append({
-            "Month": i,
-            "Payment": monthly_payment,
-            "Principal": principal_payment,
-            "Interest": interest_payment,
-            "Remaining Balance": remaining_balance
-        })
-    return pd.DataFrame(schedule)
 
 # --- Page Configuration and Title ---
 st.set_page_config(page_title="Count Your Chickens Before They Hatch", page_icon="🐔", layout="wide")
@@ -103,7 +81,7 @@ with st.form(key="loan_form"):
             help="Enter your current interest rate."
         )
     
-    # Change: Using a number input instead of a slider for the potential rate cut
+    # Using a number input for the potential rate cut
     rate_cut = st.number_input(
         "Potential Interest Rate Cut (%)",
         value=0.0,
@@ -147,27 +125,6 @@ if submitted:
         col3.metric("Monthly Savings", f"${savings_per_month:.2f}")
         st.markdown(f"### Annual Savings: **${savings_per_year:.2f}**")
 
-        # --- Amortization Schedule ---
-        with st.expander("Show Amortization Schedule"):
-            schedule = generate_amortization_schedule(loan_amount, loan_term_years, interest_rate)
-            st.dataframe(schedule)
-
-        # --- Cumulative Savings Chart ---
-        with st.expander("View Cumulative Savings Chart"):
-            months = list(range(1, loan_term_years * 12 + 1))
-            cumulative_savings = [savings_per_month * m for m in months]
-            df_savings = pd.DataFrame({
-                "Month": months,
-                "Cumulative Savings": cumulative_savings
-            })
-            chart = alt.Chart(df_savings).mark_line(color='green').encode(
-                x='Month',
-                y='Cumulative Savings'
-            ).properties(
-                title="Cumulative Savings Over Time"
-            )
-            st.altair_chart(chart, use_container_width=True)
-
 # --- Expandable Disclaimer ---
 with st.expander("Disclaimer"):
     st.write("""
@@ -176,3 +133,4 @@ with st.expander("Disclaimer"):
     Actual loan terms, interest rates, and savings may vary depending on your lender and financial situation. 
     Please consult a professional for personalized financial advice.
     """)
+
