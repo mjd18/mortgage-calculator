@@ -2,6 +2,9 @@ import streamlit as st
 import random
 import math
 
+# MUST be the very first Streamlit command
+st.set_page_config(page_title="Count Your Chickens", page_icon="🐔", layout="wide")
+
 # 🐔 Branding & Visual Identity for "Count Your Chickens Before They Hatch"
 
 # 🎨 Colour Palette
@@ -31,7 +34,6 @@ st.markdown(
 )
 
 # 🎨 Apply Custom Styling
-st.set_page_config(page_title="Count Your Chickens", page_icon="🐔", layout="wide")
 st.markdown(
     f"""
     <style>
