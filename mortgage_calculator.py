@@ -117,7 +117,7 @@ if submitted:
         col3.metric("Monthly Savings", f"${savings_per_month:.2f}")
         st.markdown(f"### Annual Savings: **${savings_per_year:.2f}**")
         
-        # --- RBA One-Liners ---
+        # --- RBA One-Liners (Now Reworded) ---
         rba_jokes = [
             "The RBA says they don’t predict the future—just strongly suggest how bad it’s going to be.",
             "My bank balance and the RBA have one thing in common—both are consistently disappointing.",
@@ -160,7 +160,7 @@ if submitted:
             "'The RBA has decided to hold rates this month.' Yeah, but for how long? Longer than my last relationship? Doubt it.",
             "If the RBA was a car, it would be stuck in reverse—always pulling us back."
         ]
-        st.markdown("#### RBA One-Liner")
+        st.markdown("#### Want a Laugh?")
         st.info(random.choice(rba_jokes))
 
 # --- Expandable Disclaimer ---
@@ -171,3 +171,15 @@ with st.expander("Disclaimer"):
     Actual loan terms, interest rates, and savings may vary depending on your lender and financial situation. 
     Please consult a professional for personalized financial advice.
     """)
+
+# --- Buy Me A Coffee Link ---
+st.markdown(
+    """
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="https://www.buymeacoffee.com/Dancey" target="_blank">
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;">
+      </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
