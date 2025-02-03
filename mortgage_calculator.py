@@ -2,6 +2,64 @@ import streamlit as st
 import random
 import math
 
+# 🐔 Branding & Visual Identity for "Count Your Chickens Before They Hatch"
+
+# 🎨 Colour Palette
+PRIMARY_COLOR = "#FFD700"  # Golden Yellow - Savings & Chicken Theme
+ACCENT_COLOR = "#FF9F1C"   # Warm Orange - Energy & Engagement
+BACKGROUND_COLOR = "#AEEEEE"  # Soft Sky Blue - Trust & Clarity
+TEXT_COLOR = "#1C3D5A"     # Deep Navy - Professionalism & Contrast
+
+# 🔤 Typography
+HEADINGS_FONT = "Poppins, sans-serif"
+BODY_FONT = "Inter, sans-serif"
+ACCENT_FONT = "Pacifico, cursive"  # Occasional playful handwritten text
+
+# 🐔 Logo & Icons
+ICONS = {
+    "savings": "🥚 Egg icon - represents savings",
+    "growth": "🐥 Hatching chick - financial growth",
+    "rate_drop": "📉 Falling feather - interest rate drop"
+}
+
+# 🎨 Apply Custom Styling
+st.set_page_config(page_title="Count Your Chickens", page_icon="🐔", layout="wide")
+st.markdown(
+    f"""
+    <style>
+        body {{
+            background-color: {BACKGROUND_COLOR};
+            font-family: {BODY_FONT};
+            color: {TEXT_COLOR};
+        }}
+        .stButton > button {{
+            background-color: {PRIMARY_COLOR};
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            padding: 10px;
+            transition: all 0.3s ease-in-out;
+        }}
+        .stButton > button:hover {{
+            background-color: {ACCENT_COLOR};
+            transform: scale(1.05);
+        }}
+        .stTitle {{
+            font-family: {HEADINGS_FONT};
+            color: {TEXT_COLOR};
+        }}
+        .chicken-banner {{
+            text-align: center;
+            font-size: 24px;
+            font-family: {ACCENT_FONT};
+            color: {PRIMARY_COLOR};
+            margin-bottom: 20px;
+        }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- Calculation Functions ---
 def calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment):
     total_payments = loan_term_years * 12
@@ -37,8 +95,7 @@ def mortgage_calculator(loan_amount, loan_term_years, interest_rate):
     monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
     return round(monthly_payment, 2)
 
-# --- Page Configuration and Title ---
-st.set_page_config(page_title="Count Your Chickens Before They Hatch", page_icon="🐔", layout="wide")
+# --- Page Title & Description ---
 st.title("🐔 Count Your Chickens Before They Hatch 🥚")
 st.write("Discover how a drop in interest rates could hatch extra savings!")
 
@@ -95,7 +152,6 @@ with st.form(key="loan_form"):
 
 # --- Main Calculation & Output ---
 if submitted:
-    # If the user provided monthly repayment, calculate the interest rate first
     if input_type == "Monthly Repayment":
         interest_rate = calculate_interest_rate(loan_amount, loan_term_years, monthly_repayment)
         if interest_rate is None:
@@ -117,7 +173,7 @@ if submitted:
         col3.metric("Monthly Savings", f"${savings_per_month:.2f}")
         st.markdown(f"### Annual Savings: **${savings_per_year:.2f}**")
         
-        # --- RBA One-Liners (Now Reworded) ---
+        # --- RBA One-Liners ---
         rba_jokes = [
             "The RBA says they don’t predict the future—just strongly suggest how bad it’s going to be.",
             "My bank balance and the RBA have one thing in common—both are consistently disappointing.",
@@ -163,7 +219,6 @@ if submitted:
         st.markdown("#### Want a Laugh?")
         st.info(random.choice(rba_jokes))
 
-# --- Expandable Disclaimer ---
 with st.expander("Disclaimer"):
     st.write("""
     **Disclaimer:** This tool is for **illustrative purposes only** and does not constitute financial advice. 
@@ -172,7 +227,6 @@ with st.expander("Disclaimer"):
     Please consult a professional for personalized financial advice.
     """)
 
-# --- Buy Me A Coffee Link ---
 st.markdown(
     """
     <div style="text-align: center; margin-top: 20px;">
