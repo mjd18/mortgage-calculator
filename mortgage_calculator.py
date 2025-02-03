@@ -22,37 +22,41 @@ ICONS = {
     "rate_drop": "📉 Falling feather - interest rate drop"
 }
 
+# --- Load External Fonts ---
+st.markdown(
+    """
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Pacifico&display=swap" rel="stylesheet">
+    """, 
+    unsafe_allow_html=True
+)
+
 # 🎨 Apply Custom Styling
 st.set_page_config(page_title="Count Your Chickens", page_icon="🐔", layout="wide")
 st.markdown(
     f"""
     <style>
         body {{
-            background-color: {BACKGROUND_COLOR};
-            font-family: {BODY_FONT};
-            color: {TEXT_COLOR};
+            background-color: {BACKGROUND_COLOR} !important;
+            font-family: {BODY_FONT} !important;
+            color: {TEXT_COLOR} !important;
         }}
         .stButton > button {{
-            background-color: {PRIMARY_COLOR};
-            color: white;
-            font-size: 18px;
-            border-radius: 10px;
-            padding: 10px;
+            background-color: {PRIMARY_COLOR} !important;
+            color: white !important;
+            font-size: 18px !important;
+            border-radius: 10px !important;
+            padding: 10px !important;
             transition: all 0.3s ease-in-out;
         }}
         .stButton > button:hover {{
-            background-color: {ACCENT_COLOR};
+            background-color: {ACCENT_COLOR} !important;
             transform: scale(1.05);
-        }}
-        .stTitle {{
-            font-family: {HEADINGS_FONT};
-            color: {TEXT_COLOR};
         }}
         .chicken-banner {{
             text-align: center;
-            font-size: 24px;
-            font-family: {ACCENT_FONT};
-            color: {PRIMARY_COLOR};
+            font-size: 32px;
+            font-family: {ACCENT_FONT}, cursive;
+            color: {PRIMARY_COLOR} !important;
             margin-bottom: 20px;
         }}
     </style>
@@ -95,8 +99,8 @@ def mortgage_calculator(loan_amount, loan_term_years, interest_rate):
     monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -total_payments)
     return round(monthly_payment, 2)
 
-# --- Page Title & Description ---
-st.title("🐔 Count Your Chickens Before They Hatch 🥚")
+# --- Page Title & Description using Custom Branding ---
+st.markdown("<div class='chicken-banner'>🐔 Count Your Chickens Before They Hatch 🥚</div>", unsafe_allow_html=True)
 st.write("Discover how a drop in interest rates could hatch extra savings!")
 
 # --- Main Page Form for Inputs ---
