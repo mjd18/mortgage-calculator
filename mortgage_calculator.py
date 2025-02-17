@@ -1,6 +1,5 @@
 import streamlit as st
 import random
-import math
 
 # 🐔 Branding & Visual Identity for "Count Your Chickens Before They Hatch"
 
@@ -230,7 +229,7 @@ with st.expander("Disclaimer"):
     **Disclaimer:** This tool is for **illustrative purposes only** and does not constitute financial advice. 
     The calculations are based on general assumptions, including fixed monthly repayments. 
     Actual loan terms, interest rates, and savings may vary depending on your lender and financial situation. 
-    Please consult a professional for personalised financial advice.
+    Please consult a professional for personalized financial advice.
     """)
 
 st.markdown(
