@@ -2,9 +2,6 @@ import streamlit as st
 import random
 import math
 
-# MUST be the very first Streamlit command
-st.set_page_config(page_title="Count Your Chickens", page_icon="🐔", layout="wide")
-
 # 🐔 Branding & Visual Identity for "Count Your Chickens Before They Hatch"
 
 # 🎨 Colour Palette
@@ -24,6 +21,9 @@ ICONS = {
     "growth": "🐥 Hatching chick - financial growth",
     "rate_drop": "📉 Falling feather - interest rate drop"
 }
+
+# MUST be the very first Streamlit command
+st.set_page_config(page_title="Count Your Chickens", page_icon="🐔", layout="wide")
 
 # --- Load External Fonts ---
 st.markdown(
@@ -144,10 +144,10 @@ with st.form(key="loan_form"):
             help="Enter your current interest rate."
         )
     
-    # Using a number input for the potential rate cut
+    # Using a number input for the potential rate cut with a default placeholder of 0.25%
     rate_cut = st.number_input(
         "Potential Interest Rate Cut (%)",
-        value=0.0,
+        value=0.25,
         min_value=0.0,
         max_value=10.0,
         step=0.01,
